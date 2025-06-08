@@ -4,7 +4,7 @@ import torch.nn.functional as F
 from typing import Callable, List
 import matplotlib.pyplot as plt
 from tqdm.auto import tqdm
-from func import FNOBlockNd
+from Algorithms.func import FNOBlockNd
 
 
 class FNOnd(nn.Module):
