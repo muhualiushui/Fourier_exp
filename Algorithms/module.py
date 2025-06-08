@@ -68,7 +68,7 @@ class ATTFNOnd(nn.Module):
             FNOBlockNd(width, width, modes)
             for _ in range(n_blocks)
         ])
-        self.Attention = NDAttention(width, num_heads=4, dropout=0.1)
+        self.Attention = NDAttention(width, num_heads=1, dropout=0.1)
         self.proj = ConvNd(width, out_c, kernel_size=1)
         self.act = activation
         # Loss functions remain the same
