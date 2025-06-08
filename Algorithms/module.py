@@ -69,13 +69,18 @@ class ATTFNOnd(nn.Module):
             for _ in range(n_blocks)
         ])
         self.Attention = NDAttention(in_c, num_heads=1, dropout=0.1)
+        # send Attention block to a dedicated GPU
+        self.attn_device = torch.device('cuda:7')
+        self.Attention = self.Attention.to(self.attn_device)
+
         self.proj = ConvNd(width, out_c, kernel_size=1)
         self.act = activation
         # Loss functions remain the same
         self.loss_fn = loss_fn
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        x_att = self.Attention(x)
+        # move input to attention device, apply attention, then move back
+        x_att = self.Attention(x.to(self.attn_device)).to(x.device)
         x0 = self.lift(x_att)
         x_branch = x0
         for blk in self.blocks:
