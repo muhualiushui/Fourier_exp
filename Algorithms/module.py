@@ -81,8 +81,6 @@ class ATTFNOnd(nn.Module):
         # move input to attention device, apply attention, then move back
         self.Attention.to(self.attn_device)
         x_device = x.device
-        print(x_device)
-        print(self.Attention.device)
         x_att = self.Attention(x.to(self.attn_device)).to(x_device)
         x0 = self.lift(x_att)
         x_branch = x0
