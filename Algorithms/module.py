@@ -81,6 +81,7 @@ class ATTFNOnd(nn.Module):
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         # move input to attention device, apply attention, then move back
         x_att = self.Attention(x.to(self.attn_device)).to(x.device)
+        print(x_att.device)
         x0 = self.lift(x_att)
         x_branch = x0
         for blk in self.blocks:
