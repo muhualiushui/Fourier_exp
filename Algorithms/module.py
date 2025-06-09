@@ -39,11 +39,7 @@ class FNOnd(nn.Module):
         for blk in self.blocks:
             x_branch = blk(x_branch)
             x_branch = self.act(x_branch)
-        out = self.proj(x_branch)  # shape: (B, out_c, d1, d2, ..., dN)
-        B, C_out, *spatial = out.shape
-        out = out.view(B, C_out, -1).mean(dim=-1, keepdim=True)  # shape: (B, C_out, 1)
-        out = torch.sigmoid(out)
-        return out
+        return self.proj(x_branch)
 
     def cal_loss(self, x: torch.Tensor, y: torch.Tensor) -> torch.Tensor:
         outputs = self.forward(x)
@@ -138,7 +134,12 @@ class ATTFNOnd_binary(nn.Module):
         for blk in self.blocks:
             x_branch = blk(x_branch)
             x_branch = self.act(x_branch)
-        return self.proj(x_branch)
+        out = self.proj(x_branch)  # shape: (B, out_c, d1, d2, ..., dN)
+        B, C_out, *spatial = out.shape
+        out = out.view(B, C_out, -1).mean(dim=-1, keepdim=True)  # shape: (B, C_out, 1)
+        out = torch.sigmoid(out)
+        return out
+        # return self.proj(x_branch)
 
     def cal_loss(self, x: torch.Tensor, y: torch.Tensor) -> torch.Tensor:
         outputs = self.forward(x)
