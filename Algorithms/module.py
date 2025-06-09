@@ -138,7 +138,7 @@ class ATTFNOnd_binary(nn.Module):
         B, C_out, *spatial = out.shape
         out = out.view(B, C_out, -1).mean(dim=-1, keepdim=True)  # shape: (B, C_out, 1)
         out = torch.sigmoid(out)
-        return out
+        return out.squeeze(-1)
         # return self.proj(x_branch)
 
     def cal_loss(self, x: torch.Tensor, y: torch.Tensor) -> torch.Tensor:
