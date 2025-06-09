@@ -105,7 +105,7 @@ class NDAttention(nn.Module):
         x_flat = x.view(B, C, S).permute(0, 2, 1)
 
         # self-attention
-        attn_out, _ = self.attn(x_flat, x_flat, x_flat)   # (B, S, C)
+        # attn_out, _ = self.attn(x_flat, x_flat, x_flat)   # (B, S, C)
         out = scaled_dot_product_attention(
             x_flat, x_flat, x_flat,
             attn_mask=None,
