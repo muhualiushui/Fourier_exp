@@ -5,6 +5,7 @@ import math
 from typing import Callable, List
 from functools import reduce
 from operator import mul
+from torch.nn.functional import scaled_dot_product_attention
 
 def get_timestep_embedding(time_embed_dim: int, t: torch.Tensor) -> torch.Tensor:
     """
@@ -105,6 +106,13 @@ class NDAttention(nn.Module):
 
         # self-attention
         attn_out, _ = self.attn(x_flat, x_flat, x_flat)   # (B, S, C)
+        out = scaled_dot_product_attention(
+            x_flat, x_flat, x_flat,
+            attn_mask=None,
+            is_causal=False,
+            dropout_p=0.1,  # set >0 only during training
+        )
+        return out.permute(0, 2, 1).view(B, C, *spatial) 
 
         # residual + dropout + norm
         out = x_flat + self.dropout(attn_out)             # (B, S, C)
